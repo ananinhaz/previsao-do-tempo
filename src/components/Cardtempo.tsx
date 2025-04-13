@@ -1,9 +1,10 @@
-import React, { useState, createElement } from "react";
+import React, { useState } from "react";
 import { buscarClima } from "../services/climaApi";
 import CidadesFavoritas from "./CidadesFavoritas";
 import { Button, TextField, Typography, Box, Card, CardContent, Grid, CardActions, CircularProgress } from "@mui/material";
 import { WiDaySunny, WiCloudy, WiRain, WiThunderstorm, WiSnow } from "react-icons/wi";
 import { FaWind, FaTemperatureHigh, FaTemperatureLow, FaRegHeart, FaHeart } from "react-icons/fa";
+import { IconType } from "react-icons";
 
 interface CardTempoProps {
   favoritos: string[];
@@ -49,7 +50,7 @@ const CardTempo: React.FC<CardTempoProps> = ({ favoritos, setFavoritos }) => {
   };
 
   const getClimaIcone = (descricao: string): JSX.Element => {
-    const icones: Record<string, React.ElementType> = {
+    const icones: Record<string, IconType> = {
       "clear sky": WiDaySunny,
       "clouds": WiCloudy,
       "rain": WiRain,
@@ -57,18 +58,18 @@ const CardTempo: React.FC<CardTempoProps> = ({ favoritos, setFavoritos }) => {
       "snow": WiSnow,
     };
     const Icone = icones[descricao.toLowerCase()] || WiCloudy;
-    return createElement(Icone, { size: 30 });
+    return Icone({ size: 30 }) as JSX.Element;
   };
 
   return (
-    <Box sx={{ padding: 2, backgroundColor: "transparent", maxWidth: "800px", margin: "0 auto" }}>
+    <Box sx={{ padding: 2, maxWidth: "800px", margin: "0 auto" }}>
       <Typography
         variant="h5"
         gutterBottom
         align="center"
         sx={{ color: "#fff", fontWeight: "bold", display: "flex", justifyContent: "center", marginBottom: 1 }}
       >
-        <WiDaySunny size={40} style={{ marginRight: 8 }} />
+        {WiDaySunny({ size: 40, style: { marginRight: 8 } }) as JSX.Element}
         Previsão do Tempo
       </Typography>
 
@@ -116,34 +117,25 @@ const CardTempo: React.FC<CardTempoProps> = ({ favoritos, setFavoritos }) => {
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-                        <FaTemperatureHigh size={16} color="#ff7043" />
+                        {FaTemperatureHigh({ size: 16, color: "#ff7043" }) as JSX.Element}
                         <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>Máx: {dadosClima.list[0].main.temp_max}°C</Typography>
                       </Box>
                       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-                        <FaTemperatureLow size={16} color="#64b5f6" />
+                        {FaTemperatureLow({ size: 16, color: "#64b5f6" }) as JSX.Element}
                         <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>Mín: {dadosClima.list[0].main.temp_min}°C</Typography>
                       </Box>
                       <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-                        <FaWind size={16} color="#fff" />
+                        {FaWind({ size: 16, color: "#fff" }) as JSX.Element}
                         <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
                           Vento: {dadosClima.list[0].wind.speed} m/s
                         </Typography>
                       </Box>
-                      {dadosClima.list[0].rain ? (
-                        <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-                          <WiRain size={16} color="#fff" />
-                          <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
-                            Precipitação: {dadosClima.list[0].rain["3h"]} mm
-                          </Typography>
-                        </Box>
-                      ) : (
-                        <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
-                          <WiRain size={16} color="#fff" />
-                          <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
-                            Sem precipitação
-                          </Typography>
-                        </Box>
-                      )}
+                      <Box sx={{ display: "flex", alignItems: "center", marginBottom: 0.5 }}>
+                        {WiRain({ size: 16, color: "#fff" }) as JSX.Element}
+                        <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
+                          {dadosClima.list[0].rain ? `Precipitação: ${dadosClima.list[0].rain["3h"]} mm` : "Sem precipitação"}
+                        </Typography>
+                      </Box>
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -160,11 +152,9 @@ const CardTempo: React.FC<CardTempoProps> = ({ favoritos, setFavoritos }) => {
                       '&:hover': { backgroundColor: "#1976d2", color: "#fff" },
                     }}
                   >
-                    {favoritos.includes(dadosClima.city.name) ? (
-                      <FaHeart size={20} style={{ marginRight: 8, color: '#dc004e' }} />
-                    ) : (
-                      <FaRegHeart size={20} style={{ marginRight: 8, color: '#dc004e' }} />
-                    )}
+                    {favoritos.includes(dadosClima.city.name)
+                      ? FaHeart({ size: 20, style: { marginRight: 8, color: '#dc004e' } }) as JSX.Element
+                      : FaRegHeart({ size: 20, style: { marginRight: 8, color: '#dc004e' } }) as JSX.Element}
                     {favoritos.includes(dadosClima.city.name) ? 'Remover' : 'Adicionar aos favoritos'}
                   </Button>
                 </CardActions>
@@ -187,16 +177,16 @@ const CardTempo: React.FC<CardTempoProps> = ({ favoritos, setFavoritos }) => {
                         </Typography>
                         {getClimaIcone(dia.weather[0].description)}
                         <Typography variant="body2" sx={{ color: "#fff" }}>
-                          <FaTemperatureHigh /> {dia.main.temp}°C
+                          {FaTemperatureHigh({}) as JSX.Element} {dia.main.temp}°C
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <FaTemperatureHigh size={16} color="#ff7043" />
+                          {FaTemperatureHigh({ size: 16, color: "#ff7043" }) as JSX.Element}
                           <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
                             Máx: {dia.main.temp_max}°C
                           </Typography>
                         </Box>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                          <FaTemperatureLow size={16} color="#64b5f6" />
+                          {FaTemperatureLow({ size: 16, color: "#64b5f6" }) as JSX.Element}
                           <Typography variant="body2" sx={{ color: "#fff", marginLeft: 1 }}>
                             Mín: {dia.main.temp_min}°C
                           </Typography>

@@ -75,6 +75,9 @@ desafio-dev-frontend/
    ```
 6. O projeto estará disponível em `http://localhost:3000/`
 
+## Deploy
+O deploy foi realizado no Vercel, está disponível no link: previsao-do-tempo-delta-ten.vercel.app
+
 ## Funcionalidades Adicionais
 - **Lista de Cidades Favoritas:** Os usuários podem adicionar cidades à lista de favoritas, mantida no localStorage, garantindo que a lista seja mantida quando recarregar a página.
 - **Informações Adicionais:** Além das temperaturas, são exibidas informações sobre precipitação, velocidade do vento e previsão para os próximos dias.
